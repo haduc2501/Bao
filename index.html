@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Spiderum · Viết bài mới</title>
+    <!-- Google Font & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ----- reset & base ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f7f9fc;
+            color: #1e293b;
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+
+        /* ----- thanh điều hướng (header) ----- */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #e6ecf0;
+            padding: 12px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: #3b82f6;
+            margin-right: 6px;
+            font-size: 26px;
+        }
+
+        .logo span {
+            background: linear-gradient(145deg, #2563eb, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .user-menu i {
+            font-size: 20px;
+            color: #5e6f8c;
+            cursor: default;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(145deg, #d1d5db, #9ca3af);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: default;
+        }
+
+        /* ----- container chính (viết bài) ----- */
+        .write-wrapper {
+            max-width: 960px;
+            margin: 32px auto 0;
+            padding: 0 24px;
+        }
+
+        .editor-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            padding: 40px 48px;
+            transition: all 0.2s;
+        }
+
+        /* ----- ảnh bìa (cover) ----- */
+        .cover-image {
+            background-color: #f1f5f9;
+            border-radius: 16px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #475569;
+            border: 2px dashed #cbd5e1;
+            margin-bottom: 32px;
+            transition: background 0.2s;
+            cursor: default;
+        }
+
+        .cover-image i {
+            font-size: 36px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .cover-image p {
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .cover-image span {
+            font-size: 14px;
+            color: #8b9eb0;
+            margin-top: 6px;
+        }
+
+        /* ----- input tiêu đề ----- */
+        .title-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 36px;
+            font-weight: 700;
+            padding: 12px 0;
+            margin-bottom: 8px;
+            color: #0f172a;
+            font-family: 'Inter', sans-serif;
+            border-bottom: 2px solid transparent;
+            transition: border 0.2s;
+            letter-spacing: -0.02em;
+        }
+
+        .title-input::placeholder {
+            color: #a0b3c9;
+            font-weight: 600;
+        }
+
+        .title-input:focus {
+            border-bottom: 2px solid #3b82f6;
+        }
+
+        /* ----- thanh công cụ (toolbar) ----- */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 0 8px;
+            border-bottom: 1px solid #eef2f6;
+            margin-bottom: 16px;
+        }
+
+        .tool-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 10px;
+            border-radius: 10px;
+            color: #475569;
+            font-size: 18px;
+            cursor: default;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tool-btn:hover {
+            background: #f1f5f9;
+            color: #2563eb;
+        }
+
+        .separator {
+            width: 1px;
+            height: 26px;
+            background: #e0e7ef;
+            margin: 0 4px;
+        }
+
+        /* ----- vùng nội dung (contenteditable) ----- */
+        .content-editor {
+            background: white;
+            border: none;
+            outline: none;
+            width: 100%;
+            min-height: 360px;
+            font-size: 17px;
+            line-height: 1.7;
+            color: #1e293b;
+            padding: 8px 0;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .content-editor[placeholder]:empty:before {
+            content: attr(placeholder);
+            color: #9fb0c7;
+            font-weight: 400;
+        }
+
+        .content-editor:focus {
+            border: none;
+            outline: none;
+        }
+
+        /* ----- thông tin bổ sung & nút hành động ----- */
+        .meta-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid #e9edf2;
+        }
+
+        .tag-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #4b6584;
+            font-size: 15px;
+        }
+
+        .tag-area i {
+            color: #6b7280;
+            font-size: 18px;
+        }
+
+        .tag-placeholder {
+            background: #f0f4fa;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            color: #3a546d;
+            font-weight: 500;
+            cursor: default;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            cursor: default;
+        }
+
+        .btn-draft {
+            background: white;
+            color: #3a546d;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-draft:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+
+        .btn-preview {
+            background: white;
+            color: #2563eb;
+            border: 1px solid #b1ccf5;
+        }
+
+        .btn-preview:hover {
+            background: #eef2ff;
+        }
+
+        .btn-publish {
+            background: #2563eb;
+            color: white;
+            border: none;
+            box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-publish:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        /* ----- footer nhỏ (chỉ để decor) ----- */
+        .writing-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #8b9eb0;
+        }
+
+        .writing-footer i {
+            margin: 0 4px;
+        }
+
+        /* ----- responsive ----- */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 20px;
+            }
+            .editor-card {
+                padding: 24px 24px;
+            }
+            .title-input {
+                font-size: 28px;
+            }
+            .toolbar {
+                gap: 6px;
+            }
+            .action-buttons {
+                margin-top: 16px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            .meta-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .editor-card {
+                padding: 20px 18px;
+            }
+            .title-input {
+                font-size: 24px;
+            }
+        }
+
+        /* ----- mô phỏng bài viết thực tế (tĩnh) ----- */
+        .watermark-note {
+            background: #f0f9ff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 30px;
+            color: #0369a1;
+            font-size: 14px;
+            border-left: 4px solid #3b82f6;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .watermark-note i {
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header giống Spiderum: tinh tế, sạch sẽ -->
+    <header class="navbar">
+        <div class="logo-area">
+            <a href="#" class="logo" style="pointer-events: none;">
+                <i class="fas fa-feather-alt"></i>
+                <span>Spiderum</span>
+            </a>
+        </div>
+        <div class="user-menu">
+            <i class="far fa-bell"></i>
+            <i class="far fa-envelope"></i>
+            <div class="avatar">P</div>
+        </div>
+    </header>
+
+    <main class="write-wrapper">
+        <!-- Card viết bài chính, phong cách Spiderum: thoáng, focus vào nội dung -->
+        <div class="editor-card">
+            <!-- Ảnh bìa giả lập (tĩnh) -->
+            <div class="cover-image">
+                <i class="fas fa-camera"></i>
+                <p>Thêm ảnh bìa</p>
+                <span>Đề xuất kích thước 1280x720 · PNG, JPG</span>
+            </div>
+
+            <!-- Ô nhập tiêu đề (tĩnh nhưng hiển thị placeholder) -->
+            <input type="text" class="title-input" placeholder="Tiêu đề bài viết" value="">
+
+            <!-- Thanh công cụ định dạng (demo, không hoạt động) -->
+            <div class="toolbar">
+                <button class="tool-btn" title="Đậm"><i class="fas fa-bold"></i></button>
+                <button class="tool-btn" title="Nghiêng"><i class="fas fa-italic"></i></button>
+                <button class="tool-btn" title="Gạch ngang"><i class="fas fa-strikethrough"></i></button>
+                <span class="separator"></span>
+                <button class="tool-btn" title="Tiêu đề 1"><i class="fas fa-heading"></i><span style="font-size:12px; margin-left:2px;">1</span></button>
+                <button class="tool-btn" title="Tiêu đề 2"><i class="fas fa-heading"></i><span style="font-size:12px;">2</span></button>
+                <span class="separator"></span>
+                <button class="tool-btn" title="Danh sách"><i class="fas fa-list-ul"></i></button>
+                <button class="tool-btn" title="Đánh số"><i class="fas fa-list-ol"></i></button>
+                <button class="tool-btn" title="Trích dẫn"><i class="fas fa-quote-right"></i></button>
+                <span class="separator"></span>
+                <button class="tool-btn" title="Chèn link"><i class="fas fa-link"></i></button>
+                <button class="tool-btn" title="Hình ảnh"><i class="fas fa-image"></i></button>
+                <button class="tool-btn" title="Mã"><i class="fas fa-code"></i></button>
+            </div>
+
+            <!-- Khu vực viết nội dung - contenteditable (giả lập trải nghiệm viết) -->
+            <div class="content-editor" placeholder="Viết nội dung của bạn tại đây…" contenteditable="true"></div>
+
+            <!-- Phần chân bài viết: tag và các nút hành động -->
+            <div class="meta-section">
+                <div class="tag-area">
+                    <i class="fas fa-tag"></i>
+                    <span class="tag-placeholder"><i class="far fa-plus-square" style="margin-right: 6px;"></i>Thêm chủ đề</span>
+                    <span style="color: #8b9eb0; font-size: 14px; margin-left: 4px;">#spiderum #vietbai</span>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-draft"><i class="far fa-save"></i> Lưu nháp</button>
+                    <button class="btn btn-preview"><i class="far fa-eye"></i> Xem trước</button>
+                    <button class="btn btn-publish"><i class="fas fa-paper-plane"></i> Xuất bản</button>
+                </div>
+            </div>
+
+            <!-- Một gợi ý nhỏ: giao diện tĩnh, tạo cảm giác như Spiderum thật -->
+            <div class="watermark-note">
+                <i class="fas fa-pen-fancy"></i>
+                <span>⸻ Trang viết bài mô phỏng Spiderum. Mọi thành phần đều là demo (HTML/CSS tĩnh). Hãy thử nhập tiêu đề và nội dung! (contenteditable hoạt động)</span>
+            </div>
+        </div>
+        
+        <!-- footer nhẹ nhàng -->
+        <div class="writing-footer">
+            <i class="fas fa-circle" style="font-size: 6px; color: #90a4b9;"></i> Viết bài mới · Cảm hứng từ Spiderum 
+            <i class="fas fa-circle" style="font-size: 6px; color: #90a4b9;"></i>
+        </div>
+    </main>
+
+    <!-- Hiệu ứng nhỏ: focus vào vùng nội dung khi tải trang (tăng trải nghiệm giả lập) -->
+    <script>
+        (function() {
+            // Không làm phiền, chỉ tự động focus vào contenteditable nhẹ nhàng
+            const editor = document.querySelector('.content-editor');
+            if (editor) {
+                // Không focus mạnh tránh hiểu lầm, chỉ làm placeholder đẹp
+                // nhưng có thể kích hoạt cursor để người dùng thấy có thể nhập
+                // Nếu muốn tự động focus, bỏ comment dòng dưới:
+                // setTimeout(() => editor.focus(), 100);
+            }
+        })();
+    </script>
+
+    <!-- Ghi chú: Đây là bản dựng giao diện "viết bài" theo phong cách Spiderum, 
+         sử dụng font chữ Inter, icon Font Awesome 6, layout thoáng, 
+         các nút hover, border, shadow tinh tế. 
+         Hoàn toàn responsive, thân thiện desktop & mobile. -->
+</body>
+</html>
